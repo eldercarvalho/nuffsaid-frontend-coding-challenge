@@ -13,7 +13,7 @@ export interface Message {
   priority: Priority;
 }
 
-const observable = new Observable<Message>(subscriber => {
+const observable = new Observable<Message>((subscriber) => {
   const generate = () => {
     const message = faker.lorem.sentence();
     const priority = random(0, 2) as Priority;

@@ -1,38 +1,47 @@
+import styled from 'styled-components';
+import { Theme, withTheme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
-import styled from 'styled-components';
+
 import { Message } from '@/Api';
 
-const CardButton = styled(Button)({
-  textTransform: 'none',
-});
+const CardButton = styled(Button)`
+  text-transform: none;
+
+  span {
+    text-transform: none;
+  }
+`;
 
 const CardActionsWithAlignment = styled(CardActions)({
   justifyContent: 'flex-end',
 });
 
-const messageColors = {
-  0: '#F56236',
-  1: '#FCE788',
-  2: '#88FCA3',
-};
-
 type MessageCardProps = {
   data: Message;
+  theme: Theme;
   onClear(message: string): void;
 };
 
-const MessageCard: React.FC<MessageCardProps> = ({ data, onClear }) => (
-  <Card style={{ backgroundColor: messageColors[data.priority] }}>
-    <CardContent>{data.message}</CardContent>
-    <CardActionsWithAlignment>
-      <CardButton variant="text" size="small" onClick={() => onClear(data.id)}>
-        Clear
-      </CardButton>
-    </CardActionsWithAlignment>
-  </Card>
-);
+const MessageCard: React.FC<MessageCardProps> = ({ data, onClear, ...rest }) => {
+  const messageColors = {
+    0: rest.theme.palette.error.main,
+    1: rest.theme.palette.secondary.main,
+    2: rest.theme.palette.primary.main,
+  };
 
-export default MessageCard;
+  return (
+    <Card className="message-card" style={{ backgroundColor: messageColors[data.priority] }}>
+      <CardContent>{data.message}</CardContent>
+      <CardActionsWithAlignment>
+        <CardButton variant="text" size="small" onClick={() => onClear(data.id)}>
+          Clear
+        </CardButton>
+      </CardActionsWithAlignment>
+    </Card>
+  );
+};
+
+export default withTheme()(MessageCard);

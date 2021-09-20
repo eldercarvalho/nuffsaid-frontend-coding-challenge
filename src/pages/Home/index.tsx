@@ -7,7 +7,7 @@ import MessageCard from '@/components/MessageCard';
 
 import { useMessages } from '@/contexts/messages';
 import { Priority } from '@/Api';
-import { CardColumn } from './styles';
+import { CardColumn, Controls } from './styles';
 
 const Container = styled.main({
   maxWidth: '1200px',
@@ -31,9 +31,15 @@ export const Home: React.FC = () => {
 
   return (
     <Container>
-      {/* <Box>
-        <Button>Stop</Button>
-      </Box> */}
+      <Controls>
+        <Button variant="contained" color="primary">
+          Stop
+        </Button>
+        <Button variant="contained" color="primary">
+          Clear
+        </Button>
+      </Controls>
+
       <Grid container spacing={16}>
         <Grid item xs={4}>
           <CardColumn>

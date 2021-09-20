@@ -1,21 +1,17 @@
 import React, { useMemo } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 import MessageCard from '@/components/MessageCard';
 
 import { useMessages } from '@/contexts/messages';
 import { Priority } from '@/Api';
+import { Container } from '@/styles/global';
 import { CardColumn, Controls } from './styles';
 
-const Container = styled.main({
-  maxWidth: '1200px',
-  margin: '0 auto',
-});
-
-export const Home: React.FC = () => {
-  const { messages, removeMessage } = useMessages();
+const Home: React.FC = () => {
+  const { messages, isReceiving, removeMessage, clearMessages, toggleMessageReceiving } =
+    useMessages();
   const errorMessages = useMemo(
     () => messages.filter((message) => message.priority === Priority.Error),
     [messages],
@@ -32,10 +28,10 @@ export const Home: React.FC = () => {
   return (
     <Container>
       <Controls>
-        <Button variant="contained" color="primary">
-          Stop
+        <Button variant="contained" color="primary" onClick={toggleMessageReceiving}>
+          {isReceiving ? 'Stop' : 'Continue'}
         </Button>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" onClick={clearMessages}>
           Clear
         </Button>
       </Controls>
@@ -56,7 +52,7 @@ export const Home: React.FC = () => {
         </Grid>
         <Grid item xs={4}>
           <CardColumn>
-            <h2>Warning Type 1</h2>
+            <h2>Warning Type 2</h2>
             <p>Count {warningMessages.length}</p>
             {warningMessages.map?.((msg) => (
               <MessageCard
@@ -84,3 +80,5 @@ export const Home: React.FC = () => {
     </Container>
   );
 };
+
+export default Home;

@@ -1,34 +1,61 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import generateMessage, { Message } from '@/Api';
 
 type MessagesContextData = {
   messages: Message[];
+  isReceiving: boolean;
   addMessage(data: Message): void;
   removeMessage(messageId: string): void;
+  clearMessages(): void;
+  toggleMessageReceiving(): void;
 };
 
 const MessagesContext = createContext<MessagesContextData>({} as MessagesContextData);
 
 export const MessagesProvider: React.FC = ({ children }) => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isReceiving, setIsReceiving] = useState(true);
+  const cleanUpRef = useRef(() => {});
 
   useEffect(() => {
-    const cleanUp = generateMessage((message: Message) => {
-      setMessages((oldMessages) => [...oldMessages, message]);
-    });
-    return cleanUp;
-  }, [setMessages]);
+    if (isReceiving) {
+      cleanUpRef.current = generateMessage((message: Message) => {
+        setMessages((oldMessages) => [...oldMessages, message]);
+      });
+    } else {
+      cleanUpRef.current();
+    }
 
-  const addMessage = useCallback((data: Message) => {
+    return () => cleanUpRef.current();
+  }, [setMessages, isReceiving]);
+
+  const addMessage = (data: Message) => {
     setMessages([...messages, data]);
-  }, []);
+  };
 
-  const removeMessage = useCallback((messageId: string) => {
+  const removeMessage = (messageId: string) => {
     setMessages((oldMessages) => oldMessages.filter((msg) => msg.id !== messageId));
-  }, []);
+  };
+
+  const clearMessages = () => {
+    setMessages([]);
+  };
+
+  const toggleMessageReceiving = () => {
+    setIsReceiving((oldValue) => !oldValue);
+  };
 
   return (
-    <MessagesContext.Provider value={{ messages, addMessage, removeMessage }}>
+    <MessagesContext.Provider
+      value={{
+        messages,
+        isReceiving,
+        addMessage,
+        removeMessage,
+        clearMessages,
+        toggleMessageReceiving,
+      }}
+    >
       {children}
     </MessagesContext.Provider>
   );

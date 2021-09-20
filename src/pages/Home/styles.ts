@@ -7,7 +7,7 @@ export const CardColumn = styled.div`
 
   .message-card {
     & + .message-card {
-      margin-top: 16px;
+      margin-top: 0.8rem;
     }
   }
 `;

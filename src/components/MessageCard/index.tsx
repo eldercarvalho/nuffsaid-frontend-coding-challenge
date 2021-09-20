@@ -1,9 +1,10 @@
+import { memo } from 'react';
 import styled from 'styled-components';
-import { Theme, withTheme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+import { Theme, withTheme } from '@material-ui/core/styles';
 
 import { Message } from '@/Api';
 
@@ -44,4 +45,4 @@ const MessageCard: React.FC<MessageCardProps> = ({ data, onClear, ...rest }) => 
   );
 };
 
-export default withTheme()(MessageCard);
+export default memo(withTheme()(MessageCard));

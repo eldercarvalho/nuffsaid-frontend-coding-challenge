@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { v4 } from 'uuid';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 
@@ -7,10 +8,12 @@ import MessageCard from '@/components/MessageCard';
 import { useMessages } from '@/contexts/messages';
 import { Priority } from '@/Api';
 import { Container } from '@/styles/global';
+import { useNotifications } from '@/contexts/notifications';
 import { CardColumn, Controls } from './styles';
 
 const Home: React.FC = () => {
-  const { messages, isReceiving, removeMessage, clearMessages, toggleMessageReceiving } =
+  const { addNotification } = useNotifications();
+  const { messages, isIncoming, removeMessage, clearMessages, toggleIncomingMessages } =
     useMessages();
   const errorMessages = useMemo(
     () => messages.filter((message) => message.priority === Priority.Error),
@@ -25,11 +28,23 @@ const Home: React.FC = () => {
     [messages],
   );
 
+  useEffect(() => {
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage.priority === Priority.Error) {
+        addNotification({
+          id: v4(),
+          message: lastMessage.message,
+        });
+      }
+    }
+  }, [messages]);
+
   return (
     <Container>
       <Controls>
-        <Button variant="contained" color="primary" onClick={toggleMessageReceiving}>
-          {isReceiving ? 'Stop' : 'Continue'}
+        <Button variant="contained" color="primary" onClick={toggleIncomingMessages}>
+          {isIncoming ? 'Stop' : 'Continue'}
         </Button>
         <Button variant="contained" color="primary" onClick={clearMessages}>
           Clear

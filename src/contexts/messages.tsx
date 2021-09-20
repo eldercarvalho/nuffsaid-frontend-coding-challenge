@@ -3,22 +3,22 @@ import generateMessage, { Message } from '@/Api';
 
 type MessagesContextData = {
   messages: Message[];
-  isReceiving: boolean;
+  isIncoming: boolean;
   addMessage(data: Message): void;
   removeMessage(messageId: string): void;
   clearMessages(): void;
-  toggleMessageReceiving(): void;
+  toggleIncomingMessages(): void;
 };
 
 const MessagesContext = createContext<MessagesContextData>({} as MessagesContextData);
 
 export const MessagesProvider: React.FC = ({ children }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isReceiving, setIsReceiving] = useState(true);
+  const [isIncoming, setIsIncoming] = useState(true);
   const cleanUpRef = useRef(() => {});
 
   useEffect(() => {
-    if (isReceiving) {
+    if (isIncoming) {
       cleanUpRef.current = generateMessage((message: Message) => {
         setMessages((oldMessages) => [...oldMessages, message]);
       });
@@ -27,7 +27,7 @@ export const MessagesProvider: React.FC = ({ children }) => {
     }
 
     return () => cleanUpRef.current();
-  }, [setMessages, isReceiving]);
+  }, [isIncoming, setMessages]);
 
   const addMessage = (data: Message) => {
     setMessages([...messages, data]);
@@ -41,19 +41,19 @@ export const MessagesProvider: React.FC = ({ children }) => {
     setMessages([]);
   };
 
-  const toggleMessageReceiving = () => {
-    setIsReceiving((oldValue) => !oldValue);
+  const toggleIncomingMessages = () => {
+    setIsIncoming((oldValue) => !oldValue);
   };
 
   return (
     <MessagesContext.Provider
       value={{
         messages,
-        isReceiving,
+        isIncoming,
         addMessage,
         removeMessage,
         clearMessages,
-        toggleMessageReceiving,
+        toggleIncomingMessages,
       }}
     >
       {children}

@@ -28,6 +28,7 @@
     "no-shadow": "off",
     "object-curly-newline": "off",
     "operator-linebreak": "off",
+    "no-confusing-arrow": "off",
     "implicit-arrow-linebreak": "off",
     "import/prefer-default-export": "off",
     "function-paren-newline": "off",
@@ -38,6 +39,7 @@
     "react/react-in-jsx-scope": "off",
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-filename-extension": [2, { "extensions": [".ts", ".tsx"] }],
+    "react/no-array-index-key": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

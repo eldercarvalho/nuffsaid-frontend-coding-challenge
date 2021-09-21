@@ -1,38 +1,38 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { v4 } from 'uuid';
+import { useTransition, animated } from 'react-spring';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 
 import MessageCard from '@/components/MessageCard';
 
 import { useMessages } from '@/contexts/messages';
-import { Priority } from '@/Api';
-import { Container } from '@/styles/global';
 import { useNotifications } from '@/contexts/notifications';
-import { CardColumn, Controls } from './styles';
+import { Message, Priority } from '@/Api';
+import { Container } from '@/styles/global';
+
+import { Controls } from './styles';
+
+const AnimatedGrid = animated(Grid);
 
 const Home: React.FC = () => {
   const { addNotification } = useNotifications();
   const {
     currentMessage,
-    messages,
     isIncoming,
+    sortedMessages,
+    errorsCount,
+    warnsCount,
+    infosCount,
     removeMessage,
     clearMessages,
     toggleIncomingMessages,
   } = useMessages();
-  const errorMessages = useMemo(
-    () => messages.filter((message) => message.priority === Priority.Error),
-    [messages],
-  );
-  const warningMessages = useMemo(
-    () => messages.filter((message) => message.priority === Priority.Warn),
-    [messages],
-  );
-  const infoMessages = useMemo(
-    () => messages.filter((message) => message.priority === Priority.Info),
-    [messages],
-  );
+
+  const messagesWithTransition = useTransition(sortedMessages, {
+    from: { transform: 'translateY(-300px)', opacity: 0 },
+    enter: { transform: 'translateY(0)', opacity: 1 },
+  });
 
   useEffect(() => {
     if (currentMessage.priority === Priority.Error) {
@@ -56,44 +56,30 @@ const Home: React.FC = () => {
 
       <Grid container spacing={16}>
         <Grid item xs={4}>
-          <CardColumn>
-            <h2>Error Type 1</h2>
-            <p>Count {errorMessages.length}</p>
-            {errorMessages.map?.((msg) => (
-              <MessageCard
-                key={msg.id}
-                data={msg}
-                onClear={(messageId: string) => removeMessage(messageId)}
-              />
-            ))}
-          </CardColumn>
+          <h2>Error Type 1</h2>
+          <p>Count {errorsCount}</p>
         </Grid>
         <Grid item xs={4}>
-          <CardColumn>
-            <h2>Warning Type 2</h2>
-            <p>Count {warningMessages.length}</p>
-            {warningMessages.map?.((msg) => (
-              <MessageCard
-                key={msg.id}
-                data={msg}
-                onClear={(messageId: string) => removeMessage(messageId)}
-              />
-            ))}
-          </CardColumn>
+          <h2>Warning Type 2</h2>
+          <p>Count {warnsCount}</p>
         </Grid>
         <Grid item xs={4}>
-          <CardColumn>
-            <h2>Info Type 3</h2>
-            <p>Count {infoMessages.length}</p>
-            {infoMessages.map?.((msg) => (
+          <h2>Info Type 3</h2>
+          <p>Count {infosCount}</p>
+        </Grid>
+
+        {messagesWithTransition((styles, message, t, index) =>
+          message ? (
+            <AnimatedGrid key={message.id} item xs={4} style={styles}>
               <MessageCard
-                key={msg.id}
-                data={msg}
+                data={message}
                 onClear={(messageId: string) => removeMessage(messageId)}
               />
-            ))}
-          </CardColumn>
-        </Grid>
+            </AnimatedGrid>
+          ) : (
+            <Grid key={index} item xs={4} />
+          ),
+        )}
       </Grid>
     </Container>
   );

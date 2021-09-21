@@ -13,8 +13,14 @@ import { CardColumn, Controls } from './styles';
 
 const Home: React.FC = () => {
   const { addNotification } = useNotifications();
-  const { messages, isIncoming, removeMessage, clearMessages, toggleIncomingMessages } =
-    useMessages();
+  const {
+    currentMessage,
+    messages,
+    isIncoming,
+    removeMessage,
+    clearMessages,
+    toggleIncomingMessages,
+  } = useMessages();
   const errorMessages = useMemo(
     () => messages.filter((message) => message.priority === Priority.Error),
     [messages],
@@ -29,16 +35,13 @@ const Home: React.FC = () => {
   );
 
   useEffect(() => {
-    if (messages.length > 0) {
-      const lastMessage = messages[messages.length - 1];
-      if (lastMessage.priority === Priority.Error) {
-        addNotification({
-          id: v4(),
-          message: lastMessage.message,
-        });
-      }
+    if (currentMessage.priority === Priority.Error) {
+      addNotification({
+        id: v4(),
+        message: currentMessage.message,
+      });
     }
-  }, [messages]);
+  }, [currentMessage]);
 
   return (
     <Container>

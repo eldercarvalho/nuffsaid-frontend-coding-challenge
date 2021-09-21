@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import generateMessage, { Message } from '@/Api';
 
 type MessagesContextData = {
+  currentMessage: Message;
   messages: Message[];
   isIncoming: boolean;
   addMessage(data: Message): void;
@@ -13,6 +14,7 @@ type MessagesContextData = {
 const MessagesContext = createContext<MessagesContextData>({} as MessagesContextData);
 
 export const MessagesProvider: React.FC = ({ children }) => {
+  const [currentMessage, setCurrentMessage] = useState<Message>({} as Message);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isIncoming, setIsIncoming] = useState(true);
   const cleanUpRef = useRef(() => {});
@@ -20,6 +22,7 @@ export const MessagesProvider: React.FC = ({ children }) => {
   useEffect(() => {
     if (isIncoming) {
       cleanUpRef.current = generateMessage((message: Message) => {
+        setCurrentMessage(message);
         setMessages((oldMessages) => [...oldMessages, message]);
       });
     } else {
@@ -48,6 +51,7 @@ export const MessagesProvider: React.FC = ({ children }) => {
   return (
     <MessagesContext.Provider
       value={{
+        currentMessage,
         messages,
         isIncoming,
         addMessage,

@@ -32,7 +32,7 @@
     "import/prefer-default-export": "off",
     "function-paren-newline": "off",
     "@typescript-eslint/no-shadow": ["error"],
-    "@typescript-eslint/no-unused-vars": ["warn"],
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
     "@typescript-eslint/no-use-before-define": ["error"],
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",

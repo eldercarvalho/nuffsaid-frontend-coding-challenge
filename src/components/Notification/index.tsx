@@ -10,6 +10,13 @@ type NotificationsProps = {
 
 const Notification: React.FC<NotificationsProps> = ({ id, message, onClose }) => {
   const [isOpen, setIsOpen] = useState(true);
+
+  const handleClose = (_: React.SyntheticEvent<any, Event>, reason: string) => {
+    if (reason !== 'clickaway') {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <Snackbar
       open={isOpen}
@@ -20,9 +27,10 @@ const Notification: React.FC<NotificationsProps> = ({ id, message, onClose }) =>
           Close
         </Button>,
       ]}
-      onClose={() => setIsOpen(false)}
+      onClose={handleClose}
       onExited={() => onClose(id)}
       autoHideDuration={2000}
+      disableWindowBlurListener
     />
   );
 };

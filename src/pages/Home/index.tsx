@@ -8,7 +8,7 @@ import MessageCard from '@/components/MessageCard';
 
 import { useMessages } from '@/contexts/messages';
 import { useNotifications } from '@/contexts/notifications';
-import { Message, Priority } from '@/Api';
+import { Priority } from '@/Api';
 import { Container } from '@/styles/global';
 
 import { Controls } from './styles';

@@ -20,24 +20,24 @@ const CardActionsWithAlignment = styled(CardActions)({
   justifyContent: 'flex-end',
 });
 
-type MessageCardProps = {
+export type MessageCardProps = {
   data: Message;
-  theme: Theme;
-  onClear(message: string): void;
+  theme?: Theme;
+  onClear?(messageId: string): void;
 };
 
 const MessageCard: React.FC<MessageCardProps> = ({ data, onClear, ...rest }) => {
   const messageColors = {
-    0: rest.theme.palette.error.main,
-    1: rest.theme.palette.secondary.main,
-    2: rest.theme.palette.primary.main,
+    0: rest.theme!.palette.error.main,
+    1: rest.theme!.palette.secondary.main,
+    2: rest.theme!.palette.primary.main,
   };
 
   return (
-    <Card className="message-card" style={{ backgroundColor: messageColors[data.priority] }}>
+    <Card data-testid="message-card" style={{ backgroundColor: messageColors[data.priority] }}>
       <CardContent>{data.message}</CardContent>
       <CardActionsWithAlignment>
-        <CardButton variant="text" size="small" onClick={() => onClear(data.id)}>
+        <CardButton variant="text" size="small" onClick={() => onClear!(data.id)}>
           Clear
         </CardButton>
       </CardActionsWithAlignment>

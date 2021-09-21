@@ -1,15 +1,14 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
+import { createContext, useContext, useState } from 'react';
+import Notification from '@/components/Notification';
 
-type Notification = {
+type NotificationType = {
   id: string;
   message: string;
 };
 
 type NotificationsContextData = {
-  notifications: Notification[];
-  addNotification(data: Notification): void;
+  notifications: NotificationType[];
+  addNotification(data: NotificationType): void;
 };
 
 const NotificationsContext = createContext<NotificationsContextData>(
@@ -17,36 +16,28 @@ const NotificationsContext = createContext<NotificationsContextData>(
 );
 
 export const NotificationsProvider: React.FC = ({ children }) => {
-  const [message, setMessage] = useState<Notification>({} as Notification);
-  const [isSnackbarOpened, setIsSnackbarOpened] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
 
-  useEffect(() => {
-    if (notifications.length > 0) {
-      setMessage(notifications[notifications.length - 1]);
-      setIsSnackbarOpened(true);
-    }
-  }, [notifications]);
-
-  const addNotification = useCallback((data: Notification) => {
+  const addNotification = (data: NotificationType) => {
     setNotifications([...notifications, data]);
-  }, []);
+  };
+
+  const removeNotification = (notificationId: string) => {
+    setNotifications((oldNotifications) =>
+      oldNotifications.filter((notification) => notification.id !== notificationId),
+    );
+  };
 
   return (
     <NotificationsContext.Provider value={{ notifications, addNotification }}>
-      <Snackbar
-        color="error"
-        open={isSnackbarOpened}
-        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-        message={<span>{message.message}</span>}
-        action={[
-          <Button variant="text" color="inherit" onClick={() => setIsSnackbarOpened(false)}>
-            Close
-          </Button>,
-        ]}
-        onClose={() => setIsSnackbarOpened(false)}
-        autoHideDuration={2000}
-      />
+      {notifications.map((notification) => (
+        <Notification
+          key={notification.id}
+          id={notification.id}
+          message={notification.message}
+          onClose={removeNotification}
+        />
+      ))}
       {children}
     </NotificationsContext.Provider>
   );

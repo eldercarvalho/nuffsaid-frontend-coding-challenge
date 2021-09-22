@@ -46,10 +46,15 @@ const Home: React.FC = () => {
   return (
     <Container>
       <Controls>
-        <Button variant="contained" color="primary" onClick={toggleIncomingMessages}>
+        <Button
+          data-testid="toggle-btn"
+          variant="contained"
+          color="primary"
+          onClick={toggleIncomingMessages}
+        >
           {isIncoming ? 'Stop' : 'Continue'}
         </Button>
-        <Button variant="contained" color="primary" onClick={clearMessages}>
+        <Button data-testid="clear-btn" variant="contained" color="primary" onClick={clearMessages}>
           Clear
         </Button>
       </Controls>
@@ -57,15 +62,15 @@ const Home: React.FC = () => {
       <Grid container spacing={16}>
         <Grid item xs={4}>
           <h2>Error Type 1</h2>
-          <p>Count {errorsCount}</p>
+          <p data-testid="error-count">Count {errorsCount}</p>
         </Grid>
         <Grid item xs={4}>
           <h2>Warning Type 2</h2>
-          <p>Count {warnsCount}</p>
+          <p data-testid="warn-count">Count {warnsCount}</p>
         </Grid>
         <Grid item xs={4}>
           <h2>Info Type 3</h2>
-          <p>Count {infosCount}</p>
+          <p data-testid="info-count">Count {infosCount}</p>
         </Grid>
 
         {messagesWithTransition((styles, message, t, index) =>

@@ -19,6 +19,7 @@ const Notification: React.FC<NotificationsProps> = ({ id, message, onClose }) =>
 
   return (
     <Snackbar
+      data-testid="notification"
       open={isOpen}
       anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
       message={<span>{message}</span>}

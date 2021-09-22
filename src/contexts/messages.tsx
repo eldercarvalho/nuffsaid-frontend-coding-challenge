@@ -38,9 +38,13 @@ type MessagesContextData = {
   toggleIncomingMessages(): void;
 };
 
-const MessagesContext = createContext<MessagesContextData>({} as MessagesContextData);
+export const MessagesContext = createContext<MessagesContextData>({} as MessagesContextData);
 
-export const MessagesProvider: React.FC = ({ children }) => {
+type MessagesProviderProps = {
+  testMessages?: Message[];
+};
+
+export const MessagesProvider: React.FC<MessagesProviderProps> = ({ children, testMessages }) => {
   const [currentMessage, setCurrentMessage] = useState<Message>({} as Message);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isIncoming, setIsIncoming] = useState(true);
@@ -71,6 +75,13 @@ export const MessagesProvider: React.FC = ({ children }) => {
 
     return () => cleanUpRef.current();
   }, [isIncoming, setMessages]);
+
+  useEffect(() => {
+    if (testMessages) {
+      setCurrentMessage(testMessages[testMessages.length - 1]);
+      setMessages((oldMessages) => [...testMessages, ...oldMessages]);
+    }
+  }, [testMessages]);
 
   const addMessage = (data: Message) => {
     setMessages([...messages, data]);

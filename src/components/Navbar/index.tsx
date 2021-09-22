@@ -13,7 +13,7 @@ const Container = styled(AppBar)`
 const Navbar: React.FC = () => (
   <Container>
     <Toolbar>
-      <h1>nuffsaid.com Conding Challenge</h1>
+      <h1>nuffsaid.com Coding Challenge</h1>
     </Toolbar>
   </Container>
 );

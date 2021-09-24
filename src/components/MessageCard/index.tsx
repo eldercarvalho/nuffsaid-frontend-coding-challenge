@@ -6,7 +6,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import { Theme, withTheme } from '@material-ui/core/styles';
 
-import { Message } from '@/Api';
+import { Message } from '@/services/Api';
 
 const CardButton = styled(Button)`
   text-transform: none;

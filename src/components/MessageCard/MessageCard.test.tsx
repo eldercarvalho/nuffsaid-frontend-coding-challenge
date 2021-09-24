@@ -1,7 +1,7 @@
 import { cleanup, render, fireEvent } from '@testing-library/react';
 import MessageCard, { MessageCardProps } from '@/components/MessageCard';
 import faker from 'faker';
-import { Priority } from '@/Api';
+import { Priority } from '@/services/Api';
 import { Theme } from '@/contexts/theme';
 
 const makeSut = (props: MessageCardProps) => {

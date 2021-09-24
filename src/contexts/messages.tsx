@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import generateMessage, { Message, Priority } from '@/Api';
+import generateMessage, { Message, Priority } from '@/services/Api';
 
 const sortMessages = (arr: Message[]): Message[] => {
   const matrix: Message[][] = [];

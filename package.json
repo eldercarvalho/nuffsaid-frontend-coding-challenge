@@ -30,8 +30,8 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test --silent",
-    "test:coverage": "craco test --coverage --watchAll=false --silent"
+    "test": "craco test --no-cache --runInBand",
+    "test:ci": "craco test --coverage --watchAll=false --silent"
   },
   "eslintConfig": {
     "extends": [

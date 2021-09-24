@@ -1,4 +1,4 @@
-import { Priority } from '@/Api';
+import { Priority } from '@/services/Api';
 import faker from 'faker';
 
 export const mockMessages = () => [

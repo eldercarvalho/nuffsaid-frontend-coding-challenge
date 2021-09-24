@@ -1,8 +1,8 @@
 import { cleanup, render, fireEvent } from '@testing-library/react';
 import Home from '@/pages/Home';
 import { Theme, NotificationsProvider, MessagesProvider } from '@/contexts';
-import { Message } from '@/Api';
-import { mockMessages } from '../utils/mocks';
+import { Message } from '@/services/Api';
+import { mockMessages } from '@/utils/mocks';
 
 const makeSut = (testMessages: Message[] | undefined = undefined) => {
   const sut = render(
@@ -136,7 +136,7 @@ describe('Home Page', () => {
     expect(sut.getByTestId('warn-count')).toHaveTextContent('Count 3');
   });
 
-  it('should show correct count of warn messages', () => {
+  it('should show correct count of info messages', () => {
     const mockedInfoMessage = mockMessages()[2];
     const { sut } = makeSut();
     const toggleButton = sut.getByTestId('toggle-btn');

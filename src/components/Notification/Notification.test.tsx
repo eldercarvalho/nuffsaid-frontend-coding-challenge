@@ -22,7 +22,7 @@ describe('Notification Component', () => {
     expect(screen.getByTestId('notification')).toHaveStyle({ top: '0px', right: '0px' });
   });
 
-  it('should should disappear after 2 seconds', async () => {
+  it('should disappear after 2 seconds', async () => {
     makeSut();
     const notification = screen.queryByTestId('notification');
     await aLittle(2000);
